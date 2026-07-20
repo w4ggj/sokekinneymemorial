@@ -1,0 +1,92 @@
+---
+/**
+ * RecordImage — archival photo presentation (§4.5)
+ *
+ * Displays at or below native size, never upscaled.
+ * Caption plate: Space Mono, --text-soft on --paper-2, hairline --line rule above.
+ * Any combination of year/location/source may be omitted.
+ * If all are omitted, plate reads "DATE UNKNOWN".
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  nativeWidth: number;   // px — enforces the never-upscale constraint
+  nativeHeight: number;
+  year?: string;
+  location?: string;
+  source?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  nativeWidth,
+  nativeHeight,
+  year,
+  location,
+  source,
+  class: className = '',
+} = Astro.props;
+
+// Build caption line: "YEAR · LOCATION" on line 1, "SOURCE: …" on line 2
+const captionParts = [year, location].filter(Boolean);
+const captionLine1 = captionParts.length > 0 ? captionParts.join(' · ') : 'DATE UNKNOWN';
+const captionLine2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
+---
+
+<figure class={`record-image ${className}`} style={`max-width: ${nativeWidth}px;`}>
+  <div class="record-image__frame">
+    <img
+      src={src}
+      alt={alt}
+      width={nativeWidth}
+      height={nativeHeight}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <figcaption class="record-image__caption type-caption">
+    <span class="caption-line1">{captionLine1}</span>
+    {captionLine2 && <span class="caption-line2">{captionLine2}</span>}
+  </figcaption>
+</figure>
+
+<style>
+  .record-image {
+    width: 100%; /* won't exceed max-width (native size) */
+  }
+
+  .record-image__frame {
+    line-height: 0; /* remove bottom gap under img */
+    border: 1px solid var(--line);
+    border-bottom: none;
+  }
+
+  .record-image__frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Never upscale: max-width on the figure handles the cap;
+       we never set min-width so the image won't stretch beyond its intrinsic size. */
+    image-rendering: auto;
+  }
+
+  .record-image__caption {
+    background-color: var(--paper-2);
+    color: var(--text-soft);
+    border: 1px solid var(--line);
+    border-top: 1px solid var(--line); /* hairline rule */
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0;
+  }
+
+  .caption-line1,
+  .caption-line2 {
+    display: block;
+  }
+</style>
