@@ -1,0 +1,22 @@
+name = "soke-kinney-memorial"
+compatibility_date = "2026-07-20"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "soke-kinney-memorial"
+database_id = "533ea69f-8ebe-4851-9263-b08d5c5b3c4a"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "soke-kinney-memorial-assets"
+
+[[kv_namespaces]]
+binding = "CALENDAR_CACHE"
+id = "88b96a0c2e3245dca3ff978e4551421e"
+
+[vars]
+SITE_URL = "https://sokekinneymemorial.org"
+ORG_NAME = "Soke Kinney Memorial Fund"
+ORG_EIN = "81-2108510"
