@@ -1,13 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 
-// Exactly the five full-time instructors per §5.3. Do not add others from kinneykarate.com.
+// All eight full-time instructors ordered by rank (9th Dan → 3rd Dan).
 const instructors = [
   {
     name: 'Susan Serota',
     title: 'Soke Dai Grandmaster, Ph.D.',
     rank: '9th Dan',
-    photo: 'https://kinneykarate.com/instructors/Susan.png',
+    photo: '/instructors/Susan.png',
     photoAlt: 'Susan Serota, Soke Dai Grandmaster',
     bio: `Grandmaster Susan Serota has been a student of Kinney Karate for decades and
     holds a doctorate in addition to her ninth-degree black belt. As Soke Dai, she carries
@@ -19,7 +19,7 @@ const instructors = [
     name: 'Seth Koehler',
     title: 'Grandmaster',
     rank: '8th Dan',
-    photo: 'https://kinneykarate.com/instructors/Seth.png',
+    photo: '/instructors/Seth.png',
     photoAlt: 'Seth Koehler, Grandmaster',
     bio: `Grandmaster Seth Koehler holds an eighth-degree black belt and has trained
     within the Kinney system for many years. His depth of experience in both the
@@ -27,21 +27,43 @@ const instructors = [
     the school's teaching staff.`,
   },
   {
-    name: 'Kelly Bonyata',
+    name: 'Richard Serota',
+    title: 'Senior Master Instructor',
+    rank: '7th Dan',
+    photo: '/instructors/Richy.png',
+    photoAlt: 'Richard Serota, Senior Master Instructor',
+    bio: `Senior Master Instructor Richard Serota holds a seventh-degree black belt and
+    brings decades of experience to the Kinney system. His technical precision and
+    commitment to the art's foundational principles have made him an indispensable
+    member of the school's senior teaching staff.`,
+  },
+  {
+    name: 'Jackie Prats',
     title: 'Master Instructor',
-    rank: '4th Dan',
-    photo: 'https://kinneykarate.com/instructors/Kelly2.png',
-    photoAlt: 'Kelly Bonyata, Master Instructor',
-    bio: `Master Instructor Kelly Bonyata holds a fourth-degree black belt and brings
-    particular strength in instruction for younger students. Her work has helped expand
-    the reach of the Kinney program to new generations of students in the St. Petersburg
-    community.`,
+    rank: '6th Dan',
+    photo: '/instructors/Jackie.png',
+    photoAlt: 'Jackie Prats, Master Instructor',
+    bio: `Master Instructor Jackie Prats holds a sixth-degree black belt and has been
+    a cornerstone of the Kinney program for many years. Her dedication to both the
+    technical and community aspects of the art reflects the values Soke Kinney
+    instilled in every member of his teaching staff.`,
+  },
+  {
+    name: 'Stavro Liginos',
+    title: 'Master Instructor',
+    rank: '5th Dan',
+    photo: '/instructors/Stavro.png',
+    photoAlt: 'Stavro Liginos, Master Instructor',
+    bio: `Master Instructor Stavro Liginos holds a fifth-degree black belt and brings
+    exceptional energy and technical skill to the Kinney program. His work across
+    multiple classes and age groups has helped expand the reach of the school
+    throughout the St. Petersburg community.`,
   },
   {
     name: 'Sonja Leone',
     title: 'Master Instructor',
     rank: '4th Dan',
-    photo: 'https://kinneykarate.com/instructors/Sonja.png',
+    photo: '/instructors/Sonja.png',
     photoAlt: 'Sonja Leone, Master Instructor',
     bio: `Master Instructor Sonja Leone holds a fourth-degree black belt. She teaches
     across multiple locations and age groups, contributing to the broad community
@@ -49,13 +71,24 @@ const instructors = [
     St. Petersburg.`,
   },
   {
+    name: 'Kelly Bonyata',
+    title: 'Master Instructor',
+    rank: '4th Dan',
+    photo: '/instructors/Kelly2.png',
+    photoAlt: 'Kelly Bonyata, Master Instructor',
+    bio: `Master Instructor Kelly Bonyata holds a fourth-degree black belt and brings
+    particular strength in instruction for younger students. Her work has helped expand
+    the reach of the Kinney program to new generations of students in the St. Petersburg
+    community.`,
+  },
+  {
     name: 'Tatsiana Haverkamp',
     title: 'Instructor',
     rank: '3rd Dan',
-    photo: 'https://kinneykarate.com/instructors/Tats.png',
+    photo: '/instructors/Tats.png',
     photoAlt: 'Tatsiana Haverkamp, Instructor',
     bio: `Instructor Tatsiana Haverkamp holds a third-degree black belt and brings
-    energy and precision to every class she leads. Her dedication to the students and
+    energy and precision to every class he leads. His dedication to the students and
     to the standards of the Kinney system reflects the values Soke Kinney instilled
     in every member of his teaching staff.`,
   },
@@ -64,7 +97,7 @@ const instructors = [
 
 <Base
   title="Our Instructors — Soke Kinney Memorial Fund"
-  description="Meet the five full-time instructors who carry forward the teaching of Soke Michael Kinney."
+  description="Meet the eight full-time instructors who carry forward the teaching of Soke Michael Kinney."
 >
 
   <div class="page-hero">
@@ -72,7 +105,7 @@ const instructors = [
       <p class="eyebrow">Our instructors</p>
       <h1 class="page-title">The teachers who carry it forward</h1>
       <p class="page-lede">
-        Soke Michael Kinney trained hundreds of black belts over fifty years. The five
+        Soke Michael Kinney trained hundreds of black belts over fifty years. The eight
         full-time instructors below continue that work today across the St. Petersburg
         community.
       </p>
