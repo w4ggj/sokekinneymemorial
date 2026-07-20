@@ -59,7 +59,7 @@ html {
 body {
   margin: 0;
   background-color: var(--paper);
-  color: var(--text);
+  color: var(--ink);
   font-family: 'Barlow', system-ui, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.7;
