@@ -1,10 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import RecordImage from '../components/RecordImage.astro';
+import { env } from 'cloudflare:workers';
+import { getEvents, formatEventDate } from '../lib/calendar';
 
 // Impact figures — owner populates when verified numbers exist (§10 item 2).
 // Empty array = section does not render at all.
 const impactFigures: { value: string; label: string }[] = [];
+
+const upcomingEvents = await getEvents(env, 3);
 ---
 
 <Base
@@ -112,12 +116,29 @@ const impactFigures: { value: string; label: string }[] = [];
     </section>
   )}
 
-  <!-- ── Upcoming events (stub — calendar Worker built in Phase 2) ── -->
-  <!--
-    <section class="section events" aria-labelledby="events-heading">
-      Next 3 events from the calendar Worker — see §5.1 and §5.4
+  <!-- ── Upcoming events ───────────────────────────────────── -->
+  {upcomingEvents.length > 0 && (
+    <section class="section events-preview" aria-labelledby="home-events-heading">
+      <div class="content-inner">
+        <p class="eyebrow" style="color: var(--crimson);">Calendar</p>
+        <h2 id="home-events-heading" class="section-heading">Upcoming events</h2>
+        <ul class="home-event-list" role="list">
+          {upcomingEvents.map((event) => (
+            <li class="home-event-card fade-rise">
+              <p class="home-event-date">
+                {formatEventDate(event.start, event.end, event.allDay)}
+              </p>
+              <h3 class="home-event-title">{event.title}</h3>
+              {event.location && (
+                <p class="home-event-location">{event.location}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+        <a href="/events" class="home-events-link">View all events →</a>
+      </div>
     </section>
-  -->
+  )}
 
   <!-- ── Donate CTA ─────────────────────────────────────────── -->
   <section class="section donate-cta" aria-labelledby="cta-heading">
@@ -320,6 +341,66 @@ const impactFigures: { value: string; label: string }[] = [];
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--gold);
+  }
+
+  /* ── Events preview ───────────────────────────────────────── */
+  .events-preview {
+    border-top: 1px solid var(--line);
+  }
+
+  .home-event-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .home-event-card {
+    padding: 1.25rem 1.5rem;
+    background-color: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+
+  .home-event-date {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--crimson);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .home-event-title {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+
+  .home-event-location {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    margin-top: 0.25rem;
+  }
+
+  .home-events-link {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--crimson);
+    text-decoration: none;
+  }
+
+  .home-events-link:hover,
+  .home-events-link:focus-visible {
+    color: var(--crimson-deep);
+    text-decoration: underline;
   }
 
   /* ── Donate CTA ────────────────────────────────────────────── */
