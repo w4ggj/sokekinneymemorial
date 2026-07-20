@@ -1,0 +1,210 @@
+---
+const navLinks = [
+  { href: '/',         label: 'Home'     },
+  { href: '/story',    label: 'Story'    },
+  { href: '/team',     label: 'Team'     },
+  { href: '/events',   label: 'Events'   },
+  { href: '/sponsors', label: 'Sponsors' },
+  { href: '/contact',  label: 'Contact'  },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="wordmark" aria-label="Soke Kinney Memorial Fund — home">
+      <span class="wordmark-ring" aria-hidden="true">◎</span>
+      <span class="wordmark-text">Soke Kinney Memorial Fund</span>
+    </a>
+
+    <nav aria-label="Primary navigation">
+      <ul class="nav-list" role="list">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class={currentPath === href || (href !== '/' && currentPath.startsWith(href)) ? 'nav-link nav-link--active' : 'nav-link'}
+              aria-current={currentPath === href ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href="/donate" class="nav-donate">Donate</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button
+      class="nav-toggle"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+      aria-label="Open navigation menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden>
+    <ul role="list">
+      {navLinks.map(({ href, label }) => (
+        <li><a href={href} class="mobile-nav-link">{label}</a></li>
+      ))}
+      <li><a href="/donate" class="mobile-nav-link mobile-nav-donate">Donate</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle') as HTMLButtonElement | null;
+  const mobileNav = document.getElementById('mobile-nav') as HTMLElement | null;
+  toggle?.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    if (mobileNav) mobileNav.hidden = expanded;
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    padding-block: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* Wordmark */
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .wordmark-ring {
+    font-size: 1.625rem;
+    color: var(--crimson);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .wordmark-text {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* Desktop nav */
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-soft);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: color 150ms ease;
+  }
+
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link--active {
+    color: var(--text);
+  }
+
+  .nav-donate {
+    display: inline-block;
+    background-color: var(--crimson);
+    color: var(--text-invert);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--r);
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .nav-donate:hover,
+  .nav-donate:focus-visible {
+    background-color: var(--crimson-deep);
+  }
+
+  /* Hamburger */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: auto;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text);
+    border-radius: 1px;
+  }
+
+  /* Mobile nav */
+  .mobile-nav {
+    border-top: 1px solid var(--line);
+    padding: 1rem 1.5rem 1.5rem;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mobile-nav-link {
+    text-decoration: none;
+    color: var(--text);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .mobile-nav-donate {
+    color: var(--crimson);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .nav-list { display: none; }
+    .nav-toggle { display: flex; }
+  }
+</style>

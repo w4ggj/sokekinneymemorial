@@ -1,44 +1,40 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import Base from '../layouts/Base.astro';
 import RecordImage from '../components/RecordImage.astro';
 
-// Impact data — renders nothing when unpopulated (§10 item 2)
-// Owner populates this when they have verified figures.
+// Impact figures — owner populates when verified numbers exist (§10 item 2).
+// Empty array = section does not render at all.
 const impactFigures: { value: string; label: string }[] = [];
-// Example when populated:
-// const impactFigures = [
-//   { value: '47', label: 'Scholarships Awarded' },
-//   { value: '$82,000', label: 'Distributed to Date' },
-//   { value: '200+', label: 'Students Supported' },
-// ];
 ---
 
-<BaseLayout
+<Base
   title="Soke Kinney Memorial Fund"
   description="Honoring the life and legacy of Soke Michael Kinney — martial artist, teacher, and community leader — through scholarship and education in St. Petersburg, Florida."
 >
 
-  <!-- ─── Hero ─────────────────────────────────────────────── -->
+  <!-- ── Hero ──────────────────────────────────────────────── -->
+  <!-- No photograph in the hero — see §9.1 and §5.1 -->
   <section class="hero" aria-label="Memorial hero">
-    <div class="hero__inner">
+    <div class="hero-inner">
       <img
         src="/memorial_patch.svg"
-        alt="Soke Kinney Memorial Fund commemorative patch — circular embroidered badge"
-        class="hero__patch"
-        width="280"
-        height="280"
+        alt="Soke Kinney Memorial Fund commemorative patch"
+        class="hero-patch"
+        width="260"
+        height="260"
       />
-      <div class="hero__text">
-        <h1 class="type-h1 hero__name">Soke Kinney<br />Memorial Fund</h1>
-        <p class="hero__dates type-eyebrow">1952 – 2014</p>
+      <div class="hero-text">
+        <p class="hero-eyebrow">Soke Kinney Memorial Fund</p>
+        <h1 class="hero-name">Soke Michael Kinney</h1>
+        <p class="hero-dates">1952 – 2014</p>
       </div>
     </div>
   </section>
 
-  <!-- ─── In memoriam ──────────────────────────────────────── -->
+  <!-- ── In memoriam ───────────────────────────────────────── -->
   <section class="section memoriam" aria-labelledby="memoriam-heading">
-    <div class="wide-spine memoriam__inner">
-      <div class="memoriam__portrait fade-rise" data-delay="0">
+    <div class="wide-inner">
+      <div class="memoriam-portrait fade-rise" data-delay="0">
         <RecordImage
           src="/images/michael_kinney_logo.jpg"
           alt="Painted portrait of Soke Michael Kinney"
@@ -47,68 +43,68 @@ const impactFigures: { value: string; label: string }[] = [];
           source="Kinney Family"
         />
       </div>
-      <div class="memoriam__copy fade-rise" data-delay="60">
-        <p class="type-eyebrow" style="color: var(--crimson); margin-bottom: var(--space-4);">In memoriam</p>
-        <h2 id="memoriam-heading" class="type-h2" style="margin-bottom: var(--space-6);">
-          Soke Michael Kinney<br /><span style="font-size: 1.1rem; font-weight: 400; color: var(--text-soft);">1952 – 2014</span>
-        </h2>
-        <div class="type-lede memoriam__bio">
-          <p>
-            Soke Michael Kinney devoted sixty years to the martial arts and to the communities
-            they could reach. He trained under Grand Master Ki Whang Kim in Silver Spring,
-            Maryland, earned the first Tang Soo Do Karate Association black belt in 1969, and
-            spent the decades that followed building one of the most enduring programs in
-            American martial arts history.
+      <div class="memoriam-copy fade-rise" data-delay="60">
+        <p class="eyebrow" style="color: var(--crimson);">In memoriam</p>
+        <h2 id="memoriam-heading" class="memoriam-heading">Soke Michael Kinney</h2>
+        <p class="memoriam-dates">1952 – 2014</p>
+        <div class="memoriam-bio">
+          <p class="lede">
+            Soke Michael Kinney devoted sixty years to the martial arts and to the
+            communities they could reach. He trained under Grand Master Ki Whang Kim
+            in Silver Spring, Maryland, earned the first Tang Soo Do Karate Association
+            black belt in 1969, and spent the decades that followed building one of the
+            most enduring programs in American martial arts history.
           </p>
-          <p>
-            When he moved to St. Petersburg in 1980, he turned a small back room offered by
-            the city Recreation Department into a decades-long partnership — a city-wide program
-            that touched tens of thousands of lives and was credited, in part, with helping
-            St. Petersburg earn a national All-American City award.
+          <p class="body-copy">
+            When he moved to St. Petersburg in 1980, he turned a small back room offered
+            by the city Recreation Department into a decades-long partnership — a city-wide
+            program that touched tens of thousands of lives and was credited, in part, with
+            helping St. Petersburg earn a national All-American City award.
           </p>
-          <p>
+          <p class="body-copy">
             He died October 6, 2014, at age 62. This fund carries his name and his work forward.
           </p>
         </div>
-        <a href="/story" class="btn-secondary" style="margin-top: var(--space-8);">Read his story</a>
+        <a href="/story" class="btn-secondary">Read his story</a>
       </div>
     </div>
   </section>
 
-  <!-- ─── Mission ──────────────────────────────────────────── -->
+  <!-- ── Mission ───────────────────────────────────────────── -->
   <section class="section mission" aria-labelledby="mission-heading">
-    <div class="content-spine">
-      <p class="type-eyebrow fade-rise" data-delay="0" style="color: var(--crimson); margin-bottom: var(--space-4);">Our mission</p>
-      <h2 id="mission-heading" class="type-h2 fade-rise" data-delay="60" style="margin-bottom: var(--space-8);">
+    <div class="content-inner">
+      <p class="eyebrow fade-rise" data-delay="0" style="color: var(--crimson);">Our mission</p>
+      <h2 id="mission-heading" class="section-heading fade-rise" data-delay="60">
         Continuing the work he started
       </h2>
-      <div class="type-body mission__body fade-rise" data-delay="120">
-        <p>
+      <div class="mission-body">
+        <p class="body-copy fade-rise" data-delay="120">
           The Soke Kinney Memorial Fund is a 501(c)(3) nonprofit organization established
-          to honor the legacy of Soke Michael Kinney by providing scholarships and financial
-          assistance to students who wish to study the martial arts but lack the means to do so.
+          to honor the legacy of Soke Michael Kinney by providing scholarships and
+          financial assistance to students who wish to study the martial arts but lack
+          the means to do so.
         </p>
-        <p>
-          Soke Kinney believed that the discipline, respect, and confidence the martial arts
-          cultivate belong to every child who wants them — not only those whose families can
-          afford tuition. The fund exists to make that belief real, year after year, in the
-          community where he spent the last thirty years of his life.
+        <p class="body-copy fade-rise" data-delay="180">
+          Soke Kinney believed that the discipline, respect, and confidence the martial
+          arts cultivate belong to every child who wants them — not only those whose
+          families can afford tuition. The fund exists to make that belief real, year
+          after year, in the community where he spent the last thirty years of his life.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- ─── Impact (renders only when impactFigures is populated) ── -->
+  <!-- ── Impact — renders only when figures are available ──── -->
   {impactFigures.length > 0 && (
     <section class="section impact" aria-labelledby="impact-heading">
-      <div class="wide-spine">
-        <p class="type-eyebrow" style="color: var(--gold); margin-bottom: var(--space-6);">Impact</p>
+      <div class="wide-inner">
+        <p class="eyebrow" style="color: var(--gold);">Impact</p>
         <h2 id="impact-heading" class="visually-hidden">Fund impact</h2>
-        <ul class="impact__figures" role="list">
+        <ul class="impact-figures" role="list">
           {impactFigures.map((fig, i) => (
-            <li class="impact__figure fade-rise" data-delay={String(i * 60)}>
-              <span class="type-display impact__value">{fig.value}</span>
-              <span class="type-eyebrow impact__label">{fig.label}</span>
+            <li class="impact-figure fade-rise" data-delay={String(i * 60)}>
+              <span class="impact-value">{fig.value}</span>
+              <span class="impact-label">{fig.label}</span>
             </li>
           ))}
         </ul>
@@ -116,17 +112,19 @@ const impactFigures: { value: string; label: string }[] = [];
     </section>
   )}
 
-  <!-- ─── Events preview (stubbed — §5.1 calls for next 3 events) -->
-  <!-- Built in Phase 2 when the calendar Worker is wired -->
+  <!-- ── Upcoming events (stub — calendar Worker built in Phase 2) ── -->
+  <!--
+    <section class="section events" aria-labelledby="events-heading">
+      Next 3 events from the calendar Worker — see §5.1 and §5.4
+    </section>
+  -->
 
-  <!-- ─── Donate CTA ─────────────────────────────────────────── -->
+  <!-- ── Donate CTA ─────────────────────────────────────────── -->
   <section class="section donate-cta" aria-labelledby="cta-heading">
-    <div class="content-spine donate-cta__inner fade-rise">
-      <p class="type-eyebrow" style="color: var(--crimson); margin-bottom: var(--space-4);">Support the fund</p>
-      <h2 id="cta-heading" class="type-h2" style="margin-bottom: var(--space-4);">
-        Help us keep his work alive
-      </h2>
-      <p class="type-lede" style="margin-bottom: var(--space-8); color: var(--text-soft);">
+    <div class="content-inner cta-inner fade-rise">
+      <p class="eyebrow" style="color: var(--crimson);">Support the fund</p>
+      <h2 id="cta-heading" class="section-heading">Help us keep his work alive</h2>
+      <p class="lede" style="color: var(--text-soft);">
         A gift to the Soke Kinney Memorial Fund goes directly to scholarship support
         for students in St. Petersburg, Florida.
       </p>
@@ -134,126 +132,257 @@ const impactFigures: { value: string; label: string }[] = [];
     </div>
   </section>
 
-</BaseLayout>
+</Base>
 
 <style>
-  /* ─── Hero ──────────────────────────────────────────────── */
-  .hero {
-    background-color: var(--ink);
-    padding-block: var(--space-24);
+  /* ── Layout helpers ────────────────────────────────────────── */
+  .wide-inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
   }
 
-  .hero__inner {
-    max-width: var(--wide-width);
+  .content-inner {
+    max-width: 68ch;
     margin-inline: auto;
-    padding-inline: var(--space-6);
+    padding-inline: 1.5rem;
+  }
+
+  /* ── Type helpers (local) ──────────────────────────────────── */
+  .eyebrow {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-heading {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    color: var(--text);
+  }
+
+  .lede {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .body-copy {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ── Sections ──────────────────────────────────────────────── */
+  .section {
+    padding-block: 5rem;
+  }
+
+  /* ── Hero ──────────────────────────────────────────────────── */
+  .hero {
+    background-color: var(--ink);
+    padding-block: 5rem;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-8);
+    gap: 2rem;
     text-align: center;
   }
 
-  .hero__patch {
-    width: 280px;
-    height: 280px;
-    /* Do not upscale — patch is SVG wrapping raster, treat as fixed size */
+  .hero-patch {
+    width: 260px;
+    height: 260px;
     flex-shrink: 0;
   }
 
-  .hero__name {
-    color: var(--text-invert);
-    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+  .hero-eyebrow {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244, 242, 236, 0.5);
+    margin-bottom: 0.5rem;
   }
 
-  .hero__dates {
-    color: var(--gold);
+  .hero-name {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-weight: 400;
+    color: var(--text-invert);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-dates {
+    font-family: 'Space Mono', 'Courier New', monospace;
     font-size: 0.9rem;
     letter-spacing: 0.2em;
-    margin-top: var(--space-3);
+    color: var(--gold);
   }
 
-  /* ─── Sections ───────────────────────────────────────────── */
-  .section {
-    padding-block: var(--space-24);
-  }
-
-  /* ─── In memoriam ────────────────────────────────────────── */
+  /* ── In memoriam ───────────────────────────────────────────── */
   .memoriam {
     background-color: var(--paper-2);
     border-bottom: 1px solid var(--line);
   }
 
-  .memoriam__inner {
+  .memoriam .wide-inner {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: var(--space-16);
+    gap: 4rem;
     align-items: start;
   }
 
-  .memoriam__portrait {
-    /* Let the RecordImage cap its own max-width */
+  .memoriam-portrait {
+    /* RecordImage handles its own max-width cap */
   }
 
-  .memoriam__bio {
+  .memoriam-heading {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .memoriam-dates {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: var(--text-soft);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.75rem;
+  }
+
+  .memoriam-bio {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
 
-  /* ─── Mission ────────────────────────────────────────────── */
-  .mission__body {
+  /* ── Mission ───────────────────────────────────────────────── */
+  .mission-body {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 1rem;
   }
 
-  /* ─── Impact ─────────────────────────────────────────────── */
+  /* ── Impact ────────────────────────────────────────────────── */
   .impact {
     background-color: var(--ink);
   }
 
-  .impact__figures {
+  .impact-figures {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: var(--space-16);
+    gap: 4rem;
     flex-wrap: wrap;
+    margin-top: 1.5rem;
   }
 
-  .impact__figure {
+  .impact-figure {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0.5rem;
   }
 
-  .impact__value {
-    color: var(--text-invert);
+  .impact-value {
     font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(2.75rem, 6vw, 5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text-invert);
   }
 
-  .impact__label {
+  .impact-label {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--gold);
   }
 
-  /* ─── Donate CTA ─────────────────────────────────────────── */
+  /* ── Donate CTA ────────────────────────────────────────────── */
   .donate-cta {
     border-top: 1px solid var(--line);
   }
 
-  /* ─── Responsive ─────────────────────────────────────────── */
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* ── Buttons ───────────────────────────────────────────────── */
+  .btn-primary {
+    display: inline-block;
+    background-color: var(--crimson);
+    color: var(--text-invert);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: var(--r);
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    background-color: var(--crimson-deep);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--crimson);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: var(--r);
+    text-decoration: none;
+    border: 2px solid var(--crimson);
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible {
+    background-color: var(--crimson);
+    color: var(--text-invert);
+  }
+
+  /* ── Responsive ────────────────────────────────────────────── */
   @media (max-width: 768px) {
-    .memoriam__inner {
+    .memoriam .wide-inner {
       grid-template-columns: 1fr;
     }
 
-    .memoriam__portrait {
+    .memoriam-portrait {
       max-width: 320px;
     }
 
-    .impact__figures {
-      gap: var(--space-8);
+    .impact-figures {
+      gap: 2rem;
     }
   }
 </style>

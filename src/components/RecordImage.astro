@@ -1,17 +1,16 @@
 ---
 /**
- * RecordImage — archival photo presentation (§4.5)
+ * RecordImage — archival photo record per §4.5
  *
- * Displays at or below native size, never upscaled.
+ * Image is capped at native pixel dimensions; never upscaled.
  * Caption plate: Space Mono, --text-soft on --paper-2, hairline --line rule above.
- * Any combination of year/location/source may be omitted.
- * If all are omitted, plate reads "DATE UNKNOWN".
+ * Any of year / location / source may be omitted.
+ * If all three are omitted, plate reads "DATE UNKNOWN".
  */
-
 interface Props {
   src: string;
   alt: string;
-  nativeWidth: number;   // px — enforces the never-upscale constraint
+  nativeWidth: number;
   nativeHeight: number;
   year?: string;
   location?: string;
@@ -30,14 +29,13 @@ const {
   class: className = '',
 } = Astro.props;
 
-// Build caption line: "YEAR · LOCATION" on line 1, "SOURCE: …" on line 2
-const captionParts = [year, location].filter(Boolean);
-const captionLine1 = captionParts.length > 0 ? captionParts.join(' · ') : 'DATE UNKNOWN';
-const captionLine2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
+const dateParts = [year, location].filter(Boolean);
+const line1 = dateParts.length > 0 ? dateParts.join(' · ') : 'DATE UNKNOWN';
+const line2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
 ---
 
-<figure class={`record-image ${className}`} style={`max-width: ${nativeWidth}px;`}>
-  <div class="record-image__frame">
+<figure class={`record ${className}`} style={`max-width: ${nativeWidth}px;`}>
+  <div class="record-frame">
     <img
       src={src}
       alt={alt}
@@ -47,35 +45,32 @@ const captionLine2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
       decoding="async"
     />
   </div>
-  <figcaption class="record-image__caption type-caption">
-    <span class="caption-line1">{captionLine1}</span>
-    {captionLine2 && <span class="caption-line2">{captionLine2}</span>}
+  <figcaption class="record-caption">
+    <span>{line1}</span>
+    {line2 && <span>{line2}</span>}
   </figcaption>
 </figure>
 
 <style>
-  .record-image {
-    width: 100%; /* won't exceed max-width (native size) */
+  .record {
+    width: 100%;
+    /* max-width set inline to native pixel width — enforces never-upscale */
   }
 
-  .record-image__frame {
-    line-height: 0; /* remove bottom gap under img */
+  .record-frame {
     border: 1px solid var(--line);
     border-bottom: none;
+    line-height: 0;
   }
 
-  .record-image__frame img {
+  .record-frame img {
     width: 100%;
     height: auto;
     display: block;
-    /* Never upscale: max-width on the figure handles the cap;
-       we never set min-width so the image won't stretch beyond its intrinsic size. */
-    image-rendering: auto;
   }
 
-  .record-image__caption {
+  .record-caption {
     background-color: var(--paper-2);
-    color: var(--text-soft);
     border: 1px solid var(--line);
     border-top: 1px solid var(--line); /* hairline rule */
     padding: 0.5rem 0.75rem;
@@ -83,10 +78,10 @@ const captionLine2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
     flex-direction: column;
     gap: 0.125rem;
     margin: 0;
-  }
-
-  .caption-line1,
-  .caption-line2 {
-    display: block;
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    color: var(--text-soft);
   }
 </style>
