@@ -376,6 +376,12 @@ import RecordImage from '../components/RecordImage.astro';
     gap: 1.5rem;
     flex-wrap: wrap;
     margin-top: 1.5rem;
+    min-width: 0;
+  }
+
+  .decade__images-grid > :global(*) {
+    min-width: 0;
+    flex-shrink: 1;
   }
 
   /* ── Photo invitation ───────────────────────────────────── */
