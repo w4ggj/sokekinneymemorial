@@ -34,7 +34,7 @@ const line1 = dateParts.length > 0 ? dateParts.join(' · ') : 'DATE UNKNOWN';
 const line2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
 ---
 
-<figure class={`record ${className}`} style={`max-width: ${nativeWidth}px;`}>
+<figure class={`record ${className}`} style={`max-width: min(${nativeWidth}px, 100%);`}>
   <div class="record-frame">
     <img
       src={src}
@@ -54,13 +54,16 @@ const line2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
 <style>
   .record {
     width: 100%;
-    /* max-width set inline to native pixel width — enforces never-upscale */
+    min-width: 0; /* allow shrinking below intrinsic size inside flex/grid */
+    /* max-width set inline as min(nativeWidth, 100%) — never upscales, never overflows */
   }
 
   .record-frame {
     border: 1px solid var(--line);
     border-bottom: none;
     line-height: 0;
+    min-width: 0;
+    overflow: hidden; /* belt-and-suspenders: clips any sub-pixel rounding */
   }
 
   .record-frame img {
