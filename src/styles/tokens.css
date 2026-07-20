@@ -63,6 +63,7 @@ body {
   font-family: 'Barlow', system-ui, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.7;
+  overflow-x: clip;
 }
 
 /* Prevent browser default blue from leaking into any element */

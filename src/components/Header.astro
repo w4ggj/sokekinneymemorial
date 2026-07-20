@@ -59,10 +59,27 @@ const currentPath = Astro.url.pathname;
 <script>
   const toggle = document.querySelector('.nav-toggle') as HTMLButtonElement | null;
   const mobileNav = document.getElementById('mobile-nav') as HTMLElement | null;
+
+  function openNav() {
+    toggle?.setAttribute('aria-expanded', 'true');
+    toggle?.setAttribute('aria-label', 'Close navigation menu');
+    if (mobileNav) mobileNav.hidden = false;
+  }
+
+  function closeNav() {
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open navigation menu');
+    if (mobileNav) mobileNav.hidden = true;
+  }
+
   toggle?.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!expanded));
-    if (mobileNav) mobileNav.hidden = expanded;
+    expanded ? closeNav() : openNav();
+  });
+
+  // Close nav when any mobile nav link is tapped
+  mobileNav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeNav);
   });
 </script>
 
@@ -154,8 +171,12 @@ const currentPath = Astro.url.pathname;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.625rem;
     margin-left: auto;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav-toggle span {
@@ -169,7 +190,7 @@ const currentPath = Astro.url.pathname;
   /* Mobile nav */
   .mobile-nav {
     border-top: 1px solid var(--line);
-    padding: 1rem 1.5rem 1.5rem;
+    padding: 0.5rem 1.5rem 1rem;
   }
 
   .mobile-nav ul {
@@ -178,7 +199,6 @@ const currentPath = Astro.url.pathname;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
   }
 
   .mobile-nav-link {
@@ -187,6 +207,10 @@ const currentPath = Astro.url.pathname;
     font-family: 'Barlow', system-ui, sans-serif;
     font-size: 1rem;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 0.25rem;
   }
 
   .mobile-nav-donate {
