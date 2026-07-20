@@ -54,17 +54,22 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  max-width: 100%;
   background-color: var(--paper);
   color: var(--ink);
   font-family: 'Barlow', system-ui, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.7;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
+
+figure { margin: 0; }
 
 /* Prevent browser default blue from leaking into any element */
 p, li, address, figcaption, blockquote, dd, dt {

@@ -55,6 +55,7 @@ const line2 = source ? `SOURCE: ${source.toUpperCase()}` : null;
   .record {
     width: 100%;
     min-width: 0; /* allow shrinking below intrinsic size inside flex/grid */
+    margin: 0; /* override browser default figure margin (1em 40px) */
     /* max-width set inline as min(nativeWidth, 100%) — never upscales, never overflows */
   }
 
