@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import { env } from 'cloudflare:workers';
 
 // Pre-select topic if ?topic=photos is in the URL (from /story photo invitation)
 const topicParam = Astro.url.searchParams.get('topic') ?? '';
 const preselect = topicParam === 'photos' ? 'photos' : '';
+
+const turnstileSiteKey = env.TURNSTILE_SITE_KEY ?? '';
 ---
 
 <Base
@@ -23,11 +26,12 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     <section class="contact-form-section" aria-labelledby="form-heading">
       <h2 id="form-heading" class="visually-hidden">Contact form</h2>
 
-      <!--
-        Form UI only — submission logic (Worker → Resend) is Phase 3.
-        action/method intentionally omitted; JS will handle in Phase 3.
-      -->
-      <form class="contact-form" novalidate aria-label="Contact form">
+      <div id="form-success" class="form-banner form-banner--success" hidden aria-live="polite">
+        <strong>Message sent.</strong> We typically respond within two business days.
+      </div>
+      <div id="form-error" class="form-banner form-banner--error" hidden aria-live="polite"></div>
+
+      <form id="contact-form" class="contact-form" novalidate aria-label="Contact form">
 
         <div class="field">
           <label for="contact-name" class="field__label">Your name <span class="field__required" aria-label="required">*</span></label>
@@ -87,14 +91,20 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
           ></textarea>
         </div>
 
-        <!-- Honeypot — hidden from real users, catches basic bots. Phase 3 adds Turnstile + rate limiting. -->
+        <!-- Honeypot — hidden from real users -->
         <div class="field field--honeypot" aria-hidden="true">
           <label for="contact-website">Website (leave blank)</label>
           <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off" />
         </div>
 
+        {turnstileSiteKey && (
+          <div class="field">
+            <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light"></div>
+          </div>
+        )}
+
         <div class="form-footer">
-          <button type="submit" class="btn-submit">Send message</button>
+          <button type="submit" id="submit-btn" class="btn-submit">Send message</button>
           <p class="form-note">
             Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.
             We typically respond within two business days.
@@ -142,6 +152,76 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
 
 </Base>
 
+{turnstileSiteKey && (
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const successBanner = document.getElementById('form-success') as HTMLElement | null;
+  const errorBanner = document.getElementById('form-error') as HTMLElement | null;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !submitBtn) return;
+
+    if (successBanner) successBanner.hidden = true;
+    if (errorBanner) { errorBanner.hidden = true; errorBanner.textContent = ''; }
+
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+    const topic = (form.elements.namedItem('topic') as HTMLSelectElement).value;
+    const message = (form.elements.namedItem('message') as HTMLTextAreaElement).value.trim();
+    const website = (form.elements.namedItem('website') as HTMLInputElement).value;
+
+    if (!name || !email || !topic || !message) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    const tsInput = form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]');
+    const payload: Record<string, string> = { name, email, topic, message, website };
+    if (tsInput?.value) payload['cf-turnstile-response'] = tsInput.value;
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json() as { ok: boolean; error?: string };
+
+      if (data.ok) {
+        form.reset();
+        if (successBanner) {
+          successBanner.hidden = false;
+          successBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        const ts = (window as unknown as { turnstile?: { reset(): void } }).turnstile;
+        if (typeof ts?.reset === 'function') ts.reset();
+      } else {
+        showError(data.error ?? 'Something went wrong. Please try again.');
+      }
+    } catch {
+      showError('Could not send your message. Please check your connection and try again.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send message';
+    }
+  });
+
+  function showError(msg: string) {
+    if (!errorBanner) return;
+    errorBanner.textContent = msg;
+    errorBanner.hidden = false;
+    errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+
 <style>
   /* ── Page hero ──────────────────────────────────────────── */
   .page-hero {
@@ -185,6 +265,28 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     align-items: start;
   }
 
+  /* ── Banners ────────────────────────────────────────────── */
+  .form-banner {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    padding: 0.875rem 1.25rem;
+    border-radius: var(--r);
+    margin-bottom: 1.5rem;
+  }
+
+  .form-banner--success {
+    background-color: #edfaf3;
+    border: 1px solid #a3d9b8;
+    color: #1a5c38;
+  }
+
+  .form-banner--error {
+    background-color: #fdf2f2;
+    border: 1px solid #f5c2c2;
+    color: #7a1e19;
+  }
+
   /* ── Form ───────────────────────────────────────────────── */
   .contact-form {
     display: flex;
@@ -202,7 +304,7 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     font-family: 'Barlow', system-ui, sans-serif;
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .field__required {
@@ -215,7 +317,7 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
   .field__textarea {
     font-family: 'Barlow', system-ui, sans-serif;
     font-size: 1rem;
-    color: var(--text);
+    color: var(--ink);
     background-color: var(--paper);
     border: 1px solid var(--line);
     border-radius: var(--r);
@@ -239,7 +341,6 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     min-height: 140px;
   }
 
-  /* Custom select */
   .field__select-wrap {
     position: relative;
   }
@@ -259,7 +360,6 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     font-size: 0.75rem;
   }
 
-  /* Honeypot — visually and audibly hidden */
   .field--honeypot {
     position: absolute;
     left: -9999px;
@@ -294,6 +394,11 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
   .btn-submit:hover,
   .btn-submit:focus-visible {
     background-color: var(--crimson-deep);
+  }
+
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   .form-note {
@@ -333,7 +438,7 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     font-family: 'Barlow', system-ui, sans-serif;
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: var(--text);
+    color: var(--ink);
   }
 
   .contact-info__link {
@@ -362,7 +467,7 @@ const preselect = topicParam === 'photos' ? 'photos' : '';
     font-family: 'Barlow', system-ui, sans-serif;
     font-size: 0.9rem;
     line-height: 1.65;
-    color: var(--text);
+    color: var(--ink);
   }
 
   /* ── Utilities ──────────────────────────────────────────── */

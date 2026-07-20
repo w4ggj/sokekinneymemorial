@@ -1,0 +1,227 @@
+---
+import Base from '../layouts/Base.astro';
+import { env } from 'cloudflare:workers';
+import { getEvents, formatEventDate } from '../lib/calendar';
+
+const events = await getEvents(env);
+---
+
+<Base
+  title="Events — Soke Kinney Memorial Fund"
+  description="Upcoming events from the Soke Kinney Memorial Fund and Kinney Karate."
+>
+
+  <div class="page-hero">
+    <div class="page-hero__inner">
+      <p class="eyebrow">Calendar</p>
+      <h1 class="page-title">Upcoming events</h1>
+    </div>
+  </div>
+
+  <section class="events-section" aria-labelledby="events-heading">
+    <div class="events-inner">
+      <h2 id="events-heading" class="visually-hidden">Events list</h2>
+
+      {events.length === 0 ? (
+        <div class="empty-state">
+          <p class="empty-state__text">
+            No events scheduled right now. Follow us on Facebook for announcements.
+          </p>
+          <a
+            href="https://www.facebook.com/KinneyKarate"
+            class="btn-secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Follow on Facebook
+          </a>
+        </div>
+      ) : (
+        <ul class="event-list" role="list">
+          {events.map((event) => (
+            <li class="event-card fade-rise">
+              <div class="event-card__date">
+                <p class="event-card__date-text">
+                  {formatEventDate(event.start, event.end, event.allDay)}
+                </p>
+              </div>
+              <div class="event-card__body">
+                <h3 class="event-card__title">{event.title}</h3>
+                {event.location && (
+                  <p class="event-card__location">{event.location}</p>
+                )}
+                {event.description && (
+                  <p class="event-card__description">{event.description}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  /* ── Page hero ──────────────────────────────────────────── */
+  .page-hero {
+    background-color: var(--ink);
+    padding-block: 4rem;
+  }
+
+  .page-hero__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244, 242, 236, 0.5);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .page-title {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-weight: 400;
+    color: var(--text-invert);
+    line-height: 1.1;
+  }
+
+  /* ── Events section ─────────────────────────────────────── */
+  .events-section {
+    padding-block: 4rem;
+  }
+
+  .events-inner {
+    max-width: 800px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* ── Empty state ────────────────────────────────────────── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 3rem 2rem;
+    background-color: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+
+  .empty-state__text {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--crimson);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--r);
+    text-decoration: none;
+    border: 2px solid var(--crimson);
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible {
+    background-color: var(--crimson);
+    color: var(--text-invert);
+  }
+
+  /* ── Event list ─────────────────────────────────────────── */
+  .event-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ── Event card ─────────────────────────────────────────── */
+  .event-card {
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .event-card__date-text {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--crimson);
+    text-transform: uppercase;
+  }
+
+  .event-card__title {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .event-card__location {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    color: var(--text-soft);
+  }
+
+  .event-card__description {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--ink);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Utilities ──────────────────────────────────────────── */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 400px) {
+    .page-hero__inner,
+    .events-inner {
+      padding-inline: 1rem;
+    }
+
+    .event-card {
+      padding: 1.25rem;
+    }
+
+    .empty-state {
+      padding: 2rem 1.25rem;
+    }
+  }
+</style>
