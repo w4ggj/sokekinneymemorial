@@ -14,7 +14,6 @@ const currentPath = Astro.url.pathname;
 <header class="site-header">
   <div class="header-inner">
     <a href="/" class="wordmark" aria-label="Soke Kinney Memorial Fund — home">
-      <span class="wordmark-ring" aria-hidden="true">◎</span>
       <span class="wordmark-text">Soke Kinney Memorial Fund</span>
     </a>
 
@@ -90,21 +89,13 @@ const currentPath = Astro.url.pathname;
   .wordmark {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
     text-decoration: none;
     flex-shrink: 0;
   }
 
-  .wordmark-ring {
-    font-size: 1.625rem;
-    color: var(--crimson);
-    line-height: 1;
-    user-select: none;
-  }
-
   .wordmark-text {
     font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     font-weight: 400;
     line-height: 1.25;
     color: var(--text);
@@ -206,5 +197,18 @@ const currentPath = Astro.url.pathname;
   @media (max-width: 768px) {
     .nav-list { display: none; }
     .nav-toggle { display: flex; }
+  }
+
+  @media (max-width: 400px) {
+    .header-inner {
+      padding-inline: 1rem;
+    }
+
+    .wordmark-text {
+      font-size: 0.9375rem;
+      white-space: normal;
+      max-width: 12ch;
+      line-height: 1.2;
+    }
   }
 </style>

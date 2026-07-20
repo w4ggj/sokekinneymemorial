@@ -65,6 +65,11 @@ body {
   line-height: 1.7;
 }
 
+/* Prevent browser default blue from leaking into any element */
+p, li, address, figcaption, blockquote, dd, dt {
+  color: inherit;
+}
+
 img, video { max-width: 100%; height: auto; display: block; }
 
 /* ─── Type scale ─────────────────────────────────────────────── */
@@ -102,6 +107,7 @@ img, video { max-width: 100%; height: auto; display: block; }
   font-size: clamp(1.15rem, 1.6vw, 1.35rem);
   font-weight: 300;
   line-height: 1.6;
+  color: var(--text);
 }
 
 .type-body {

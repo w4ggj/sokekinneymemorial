@@ -49,7 +49,7 @@ const impactFigures: { value: string; label: string }[] = [];
         <p class="memoriam-dates">1952 – 2014</p>
         <div class="memoriam-bio">
           <p class="lede">
-            Soke Michael Kinney devoted sixty years to the martial arts and to the
+            Soke Michael Kinney devoted over fifty years to the martial arts and to the
             communities they could reach. He trained under Grand Master Ki Whang Kim
             in Silver Spring, Maryland, earned the first Tang Soo Do Karate Association
             black belt in 1969, and spent the decades that followed building one of the
@@ -79,7 +79,7 @@ const impactFigures: { value: string; label: string }[] = [];
       </h2>
       <div class="mission-body">
         <p class="body-copy fade-rise" data-delay="120">
-          The Soke Kinney Memorial Fund is a 501(c)(3) nonprofit organization established
+          The Soke Kinney Memorial Fund is a 501&#40;c&#41;&#40;3&#41; nonprofit organization established
           to honor the legacy of Soke Michael Kinney by providing scholarships and
           financial assistance to students who wish to study the martial arts but lack
           the means to do so.
@@ -173,6 +173,7 @@ const impactFigures: { value: string; label: string }[] = [];
     font-weight: 300;
     line-height: 1.6;
     margin-bottom: 1.5rem;
+    color: var(--text);
   }
 
   .body-copy {
@@ -383,6 +384,42 @@ const impactFigures: { value: string; label: string }[] = [];
 
     .impact-figures {
       gap: 2rem;
+    }
+  }
+
+  /* 320px — smallest supported viewport (§12) */
+  @media (max-width: 400px) {
+    .hero {
+      padding-block: 3rem;
+    }
+
+    .hero-patch {
+      width: 200px;
+      height: 200px;
+    }
+
+    .section {
+      padding-block: 3rem;
+    }
+
+    .wide-inner,
+    .content-inner {
+      padding-inline: 1rem;
+    }
+
+    .memoriam .wide-inner {
+      gap: 2rem;
+    }
+
+    .memoriam-portrait {
+      max-width: 100%;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      width: 100%;
+      text-align: center;
+      padding-inline: 1rem;
     }
   }
 </style>
