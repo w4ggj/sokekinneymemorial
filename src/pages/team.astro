@@ -1,0 +1,239 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Exactly the five full-time instructors per §5.3. Do not add others from kinneykarate.com.
+const instructors = [
+  {
+    name: 'Susan Serota',
+    title: 'Soke Dai Grandmaster, Ph.D.',
+    rank: '9th Dan',
+    photo: 'https://kinneykarate.com/instructors/Susan.png',
+    photoAlt: 'Susan Serota, Soke Dai Grandmaster',
+    bio: `Grandmaster Susan Serota has been a student of Kinney Karate for decades and
+    holds a doctorate in addition to her ninth-degree black belt. As Soke Dai, she carries
+    forward the teaching lineage of Soke Michael Kinney and serves as the head of the
+    school he founded. Her leadership has sustained both Kinney Karate and the Memorial
+    Fund in the years since Soke Kinney's passing.`,
+  },
+  {
+    name: 'Seth Koehler',
+    title: 'Grandmaster',
+    rank: '8th Dan',
+    photo: 'https://kinneykarate.com/instructors/Seth.png',
+    photoAlt: 'Seth Koehler, Grandmaster',
+    bio: `Grandmaster Seth Koehler holds an eighth-degree black belt and has trained
+    within the Kinney system for many years. His depth of experience in both the
+    technical and instructional dimensions of the art makes him one of the pillars of
+    the school's teaching staff.`,
+  },
+  {
+    name: 'Kelly Bonyata',
+    title: 'Master Instructor',
+    rank: '4th Dan',
+    photo: 'https://kinneykarate.com/instructors/Kelly2.png',
+    photoAlt: 'Kelly Bonyata, Master Instructor',
+    bio: `Master Instructor Kelly Bonyata holds a fourth-degree black belt and brings
+    particular strength in instruction for younger students. Her work has helped expand
+    the reach of the Kinney program to new generations of students in the St. Petersburg
+    community.`,
+  },
+  {
+    name: 'Sonja Leone',
+    title: 'Master Instructor',
+    rank: '4th Dan',
+    photo: 'https://kinneykarate.com/instructors/Sonja.png',
+    photoAlt: 'Sonja Leone, Master Instructor',
+    bio: `Master Instructor Sonja Leone holds a fourth-degree black belt. She teaches
+    across multiple locations and age groups, contributing to the broad community
+    presence that has been the hallmark of the Kinney program since its founding in
+    St. Petersburg.`,
+  },
+  {
+    name: 'Tatsiana Haverkamp',
+    title: 'Instructor',
+    rank: '3rd Dan',
+    photo: 'https://kinneykarate.com/instructors/Tats.png',
+    photoAlt: 'Tatsiana Haverkamp, Instructor',
+    bio: `Instructor Tatsiana Haverkamp holds a third-degree black belt and brings
+    energy and precision to every class she leads. Her dedication to the students and
+    to the standards of the Kinney system reflects the values Soke Kinney instilled
+    in every member of his teaching staff.`,
+  },
+];
+---
+
+<Base
+  title="Our Instructors — Soke Kinney Memorial Fund"
+  description="Meet the five full-time instructors who carry forward the teaching of Soke Michael Kinney."
+>
+
+  <div class="page-hero">
+    <div class="page-hero__inner">
+      <p class="eyebrow">Our instructors</p>
+      <h1 class="page-title">The teachers who carry it forward</h1>
+      <p class="page-lede">
+        Soke Michael Kinney trained hundreds of black belts over fifty years. The five
+        full-time instructors below continue that work today across the St. Petersburg
+        community.
+      </p>
+    </div>
+  </div>
+
+  <section class="team-grid-section" aria-label="Instructor cards">
+    <div class="team-grid">
+      {instructors.map((instructor) => (
+        <article class="instructor-card fade-rise">
+          <div class="instructor-card__photo">
+            <img
+              src={instructor.photo}
+              alt={instructor.photoAlt}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="instructor-card__body">
+            <p class="instructor-card__rank">{instructor.rank}</p>
+            <h2 class="instructor-card__name">{instructor.name}</h2>
+            <p class="instructor-card__title">{instructor.title}</p>
+            <p class="instructor-card__bio">{instructor.bio}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  /* ── Page hero ──────────────────────────────────────────── */
+  .page-hero {
+    background-color: var(--ink);
+    padding-block: 4rem;
+  }
+
+  .page-hero__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244, 242, 236, 0.5);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .page-title {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+    font-weight: 400;
+    color: var(--text-invert);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .page-lede {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+    font-weight: 300;
+    color: rgba(244, 242, 236, 0.75);
+    line-height: 1.6;
+    max-width: 60ch;
+  }
+
+  /* ── Team grid ──────────────────────────────────────────── */
+  .team-grid-section {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    padding-block: 4rem;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  /* ── Instructor card ────────────────────────────────────── */
+  .instructor-card {
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .instructor-card__photo {
+    aspect-ratio: 3 / 4;
+    background-color: var(--paper-2);
+    overflow: hidden;
+  }
+
+  .instructor-card__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .instructor-card__body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .instructor-card__rank {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+
+  .instructor-card__name {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .instructor-card__title {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+
+  .instructor-card__bio {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-top: 0.5rem;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────── */
+  @media (max-width: 400px) {
+    .team-grid-section {
+      padding-inline: 1rem;
+    }
+
+    .page-hero__inner {
+      padding-inline: 1rem;
+    }
+
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
