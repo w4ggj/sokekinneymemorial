@@ -7,13 +7,17 @@
 
       <div class="footer-org">
         <p class="footer-org-name">Soke Kinney Memorial Fund</p>
+        <!-- Office/contact address — where people write or visit -->
         <address class="footer-address">
-          7627 Par Avenue North<br />
-          St. Petersburg, FL 33710<br />
+          6701 49th St N<br />
+          Pinellas Park, FL 33781<br />
           <a href="tel:+17276860864">727-686-0864</a><br />
           <a href="mailto:sokekinneymemorialfund@gmail.com">sokekinneymemorialfund@gmail.com</a>
         </address>
         <p class="footer-legal">EIN 81-2108510 &middot; 501&#40;c&#41;&#40;3&#41; nonprofit</p>
+        <!-- TODO: Registered/legal address (7627 Par Avenue North, St. Petersburg, FL 33710)
+             is used on donation receipts and tax language. Update once registration change
+             to the Pinellas Park address is complete. -->
       </div>
 
       <nav class="footer-nav" aria-label="Footer links">
@@ -39,6 +43,7 @@
 
     <div class="footer-bottom">
       <p>&copy; {new Date().getFullYear()} Soke Kinney Memorial Fund. All rights reserved.</p>
+      <p class="footer-dev">Developed by <a href="https://tavaone.com/#dev" class="footer-dev-link" rel="noopener noreferrer" target="_blank">Tava One LLC</a></p>
     </div>
   </div>
 </footer>
@@ -141,6 +146,11 @@
   .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .footer-bottom p {
@@ -149,12 +159,34 @@
     color: rgba(244, 242, 236, 0.4);
   }
 
+  .footer-dev-link {
+    color: rgba(244, 242, 236, 0.4);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .footer-dev-link:hover,
+  .footer-dev-link:focus-visible {
+    color: rgba(244, 242, 236, 0.7);
+  }
+
   @media (max-width: 600px) {
     .footer-top {
       grid-template-columns: 1fr;
     }
     .footer-nav ul {
       text-align: left;
+    }
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .footer-inner {
+      padding-inline: 1rem;
     }
   }
 </style>
