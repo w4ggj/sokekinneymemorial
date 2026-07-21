@@ -72,22 +72,36 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   // Send via Resend — skipped if key not yet configured
   if (env.RESEND_API_KEY) {
+    console.log('[contact] RESEND_API_KEY present, attempting send');
     const resend = new Resend(env.RESEND_API_KEY);
     const topicLabel = TOPIC_LABELS[topic] ?? topic;
-    await resend.emails.send({
-      // TODO: switch from-address to noreply@sokekinneymemorial.org after domain verification in Resend
-      from: 'Soke Kinney Memorial Fund <onboarding@resend.dev>',
-      to: 'sokekinneymemorialfund@gmail.com',
-      replyTo: email.trim(),
-      subject: `[${topicLabel}] Message from ${name.trim()}`,
-      text: [
-        `Name: ${name.trim()}`,
-        `Email: ${email.trim()}`,
-        `Topic: ${topicLabel}`,
-        '',
-        message.trim(),
-      ].join('\n'),
-    });
+    let sendResult: Awaited<ReturnType<typeof resend.emails.send>>;
+    try {
+      sendResult = await resend.emails.send({
+        // TODO: switch from-address to noreply@sokekinneymemorial.org after domain verification in Resend
+        from: 'Soke Kinney Memorial Fund <onboarding@resend.dev>',
+        to: 'sokekinneymemorialfund@gmail.com',
+        replyTo: email.trim(),
+        subject: `[${topicLabel}] Message from ${name.trim()}`,
+        text: [
+          `Name: ${name.trim()}`,
+          `Email: ${email.trim()}`,
+          `Topic: ${topicLabel}`,
+          '',
+          message.trim(),
+        ].join('\n'),
+      });
+    } catch (err) {
+      console.error('[contact] Resend threw unexpectedly:', err);
+      return respond({ ok: false, error: 'Failed to send message. Please try again or email us directly.' }, 502);
+    }
+    if (sendResult.error) {
+      console.error('[contact] Resend returned error:', JSON.stringify(sendResult.error));
+      return respond({ ok: false, error: 'Failed to send message. Please try again or email us directly.' }, 502);
+    }
+    console.log('[contact] Resend success, id:', sendResult.data?.id);
+  } else {
+    console.warn('[contact] RESEND_API_KEY not set — email skipped');
   }
 
   // Write to D1
