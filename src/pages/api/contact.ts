@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     try {
       sendResult = await resend.emails.send({
         // TODO: switch from-address to noreply@sokekinneymemorial.org after domain verification in Resend
-        from: 'Soke Kinney Memorial Fund <onboarding@resend.dev>',
+        from: 'Soke Kinney Memorial Fund <noreply@sokekinneymemorial.org>',
         to: 'sokekinneymemorialfund@gmail.com',
         replyTo: email.trim(),
         subject: `[${topicLabel}] Message from ${name.trim()}`,

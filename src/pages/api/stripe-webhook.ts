@@ -297,7 +297,7 @@ async function handleInvoicePaymentFailed(
     const resend = new Resend(env.RESEND_API_KEY);
     try {
       await resend.emails.send({
-        from: 'Soke Kinney Memorial Fund <onboarding@resend.dev>',
+        from: 'Soke Kinney Memorial Fund <noreply@sokekinneymemorial.org>',
         to: 'sokekinneymemorialfund@gmail.com',
         subject: '[ALERT] Monthly donation payment failed',
         text: [
@@ -360,7 +360,7 @@ async function sendDonationReceipt(params: ReceiptParams): Promise<void> {
   const resend = new Resend(env.RESEND_API_KEY);
   try {
     const result = await resend.emails.send({
-      from: 'Soke Kinney Memorial Fund <onboarding@resend.dev>',
+      from: 'Soke Kinney Memorial Fund <noreply@sokekinneymemorial.org>',
       to: params.donorEmail,
       replyTo: 'sokekinneymemorialfund@gmail.com',
       subject: `Thank you for your ${freqLabel.toLowerCase()} gift to the Soke Kinney Memorial Fund`,
