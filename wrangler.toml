@@ -16,7 +16,7 @@ binding = "CALENDAR_CACHE"
 id = "88b96a0c2e3245dca3ff978e4551421e"
 
 [vars]
-SITE_URL = "https://sokekinneymemorial.org"
+SITE_URL = "https://sokekinneymemorial.jleone0.workers.dev"
 ORG_NAME = "Soke Kinney Memorial Fund"
 ORG_EIN = "81-2108510"
 # Public Turnstile site key — replace with real key from Cloudflare Dashboard > Turnstile
