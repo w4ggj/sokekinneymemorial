@@ -20,4 +20,4 @@ SITE_URL = "https://sokekinneymemorial.org"
 ORG_NAME = "Soke Kinney Memorial Fund"
 ORG_EIN = "81-2108510"
 # Public Turnstile site key — replace with real key from Cloudflare Dashboard > Turnstile
-TURNSTILE_SITE_KEY = "0x4AAAAAAD6DyuLtchJTjsLpq2l56zz0s5U"
+TURNSTILE_SITE_KEY = "0x4AAAAAAD6Dymo7uybUjLyq"
