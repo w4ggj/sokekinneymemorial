@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { env } from 'cloudflare:workers';
 import { getEvents, formatEventDate } from '../lib/calendar';
+import { sanitizeEventHtml } from '../lib/sanitize';
 
 const events = await getEvents(env);
 ---
@@ -51,7 +52,7 @@ const events = await getEvents(env);
                   <p class="event-card__location">{event.location}</p>
                 )}
                 {event.description && (
-                  <p class="event-card__description">{event.description}</p>
+                  <div class="event-card__description" set:html={sanitizeEventHtml(event.description)} />
                 )}
               </div>
             </li>
@@ -194,6 +195,27 @@ const events = await getEvents(env);
     line-height: 1.65;
     color: var(--ink);
     margin-top: 0.25rem;
+  }
+
+  .event-card__description a {
+    color: var(--crimson);
+    text-decoration: none;
+  }
+
+  .event-card__description a:hover {
+    text-decoration: underline;
+  }
+
+  .event-card__description p,
+  .event-card__description ul,
+  .event-card__description ol {
+    margin-bottom: 0.5rem;
+  }
+
+  .event-card__description p:last-child,
+  .event-card__description ul:last-child,
+  .event-card__description ol:last-child {
+    margin-bottom: 0;
   }
 
   /* ── Utilities ──────────────────────────────────────────── */
