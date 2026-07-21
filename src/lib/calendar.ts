@@ -26,6 +26,7 @@ export async function getEvents(
   }
 
   // No API key — return empty, site shows the empty state
+  console.log('[calendar] GOOGLE_CALENDAR_API_KEY:', env.GOOGLE_CALENDAR_API_KEY ? 'present' : 'absent');
   if (!env.GOOGLE_CALENDAR_API_KEY) {
     return [];
   }
@@ -43,7 +44,11 @@ export async function getEvents(
   let events: CalendarEvent[];
   try {
     const res = await fetch(url.toString());
-    if (!res.ok) return [];
+    if (!res.ok) {
+      const body = await res.text();
+      console.error('[calendar] Google API error: status=%d body=%s', res.status, body);
+      return [];
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: { items?: any[] } = await res.json();
     events = (data.items ?? []).map((item) => ({
@@ -55,7 +60,8 @@ export async function getEvents(
       description: item.description as string | undefined,
       allDay: !item.start?.dateTime,
     }));
-  } catch {
+  } catch (err) {
+    console.error('[calendar] fetch threw:', err);
     return [];
   }
 
