@@ -4,5 +4,7 @@ declare namespace Cloudflare {
     RESEND_API_KEY?: string;
     TURNSTILE_SECRET_KEY?: string;
     GOOGLE_CALENDAR_API_KEY?: string;
+    STRIPE_SECRET_KEY?: string;
+    STRIPE_WEBHOOK_SECRET?: string;
   }
 }

@@ -1,0 +1,296 @@
+---
+import Base from '../layouts/Base.astro';
+import { env } from 'cloudflare:workers';
+import Stripe from 'stripe';
+
+const sessionId = Astro.url.searchParams.get('session_id');
+
+let donation: {
+  amount: string;
+  frequency: string;
+  dedication: string | null;
+  donorName: string | null;
+} | null = null;
+
+let loadError = false;
+
+if (sessionId && env.STRIPE_SECRET_KEY) {
+  try {
+    const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const meta = session.metadata ?? {};
+
+    const intendedCents = parseInt(meta.amount_intended_cents ?? '0', 10);
+    const feeCents = meta.fee_covered === '1' ? parseInt(meta.fee_cents ?? '0', 10) : 0;
+    const totalCents = intendedCents + feeCents;
+
+    donation = {
+      amount: `$${(totalCents / 100).toFixed(2)}`,
+      frequency: meta.frequency === 'monthly' ? 'monthly' : 'one-time',
+      dedication: meta.dedication ?? null,
+      donorName: meta.donor_name ?? session.customer_details?.name ?? null,
+    };
+  } catch (err) {
+    console.error('[thank-you] Failed to retrieve session:', err);
+    loadError = true;
+  }
+}
+
+const pageTitle = donation
+  ? `Thank you${donation.donorName ? `, ${donation.donorName}` : ''}!`
+  : 'Thank you for your gift!';
+---
+
+<Base
+  title="Thank You — Soke Kinney Memorial Fund"
+  description="Your donation to the Soke Kinney Memorial Fund has been received."
+>
+
+  <div class="thankyou-page">
+    <div class="thankyou-hero">
+      <div class="thankyou-hero__inner">
+        <img
+          src="/memorial_patch.svg"
+          alt="Soke Kinney Memorial Fund patch"
+          class="thankyou-patch"
+          width="120"
+          height="120"
+        />
+        <p class="type-eyebrow thankyou-eyebrow">Your gift was received</p>
+        <h1 class="type-h1 thankyou-heading">{pageTitle}</h1>
+
+        {donation && (
+          <div class="gift-summary">
+            <span class="gift-summary__amount">{donation.amount}</span>
+            <span class="gift-summary__freq">
+              {donation.frequency === 'monthly' ? 'per month' : 'one-time gift'}
+            </span>
+          </div>
+        )}
+
+        {donation?.dedication && (
+          <p class="thankyou-dedication">
+            <em>In {donation.dedication}</em>
+          </p>
+        )}
+
+        {!donation && !loadError && (
+          <p class="thankyou-generic">
+            Your donation to the Soke Kinney Memorial Fund has been received.
+            A receipt will be emailed to you if you provided your address.
+          </p>
+        )}
+
+        {loadError && (
+          <p class="thankyou-generic">
+            Your payment was processed. If you provided your email, a receipt is on the way.
+          </p>
+        )}
+      </div>
+    </div>
+
+    <div class="thankyou-body">
+      <div class="content-spine">
+
+        <p class="thankyou-message">
+          Your gift supports scholarships for young martial artists and honors the legacy of
+          Soke Michael Kinney — who spent fifty years believing that every child who wanted
+          to train should have the chance.
+        </p>
+
+        {donation?.frequency === 'monthly' && (
+          <p class="thankyou-recurring-note">
+            Your monthly gift will recur on this date each month. You can manage or cancel
+            it at any time by emailing&nbsp;
+            <a href="mailto:sokekinneymemorialfund@gmail.com" class="inline-link">
+              sokekinneymemorialfund@gmail.com
+            </a>.
+          </p>
+        )}
+
+        <div class="thankyou-actions">
+          <a href="/story" class="btn-primary">Read his story</a>
+          <a
+            href="https://www.facebook.com/SokeKinneyMemorialFund"
+            class="btn-secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Share on Facebook
+          </a>
+        </div>
+
+        <div class="tax-note">
+          <p class="tax-note__label">Tax acknowledgment</p>
+          <p>
+            The Soke Kinney Memorial Fund (EIN&nbsp;81-2108510) is a 501(c)(3) nonprofit
+            organization. Your contribution is tax-deductible to the extent permitted by law.
+            No goods or services were provided in exchange for your gift. Please retain your
+            receipt email for your records.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</Base>
+
+<style>
+  .thankyou-page {
+    min-height: 70vh;
+  }
+
+  /* ── Hero band ─────────────────────────────────────────────────── */
+  .thankyou-hero {
+    background-color: var(--ink);
+    padding-block: 4rem 3.5rem;
+    text-align: center;
+  }
+
+  .thankyou-hero__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .thankyou-patch {
+    width: 120px;
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .thankyou-eyebrow {
+    color: rgba(244, 242, 236, 0.5);
+    margin-bottom: 0;
+  }
+
+  .thankyou-heading {
+    color: var(--text-invert);
+    margin: 0;
+  }
+
+  .gift-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    margin-top: 0.25rem;
+  }
+
+  .gift-summary__amount {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .gift-summary__freq {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.8125rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(244, 242, 236, 0.6);
+  }
+
+  .thankyou-dedication {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1.2rem;
+    color: rgba(244, 242, 236, 0.85);
+    font-weight: 300;
+    font-style: italic;
+    margin: 0.25rem 0 0;
+    max-width: 40ch;
+    text-align: center;
+  }
+
+  .thankyou-generic {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    color: rgba(244, 242, 236, 0.75);
+    max-width: 42ch;
+    text-align: center;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Body ──────────────────────────────────────────────────────── */
+  .thankyou-body {
+    padding-block: 4rem;
+  }
+
+  .thankyou-message {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .thankyou-recurring-note {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    color: var(--text-soft);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .inline-link {
+    color: var(--crimson);
+    text-decoration: none;
+  }
+  .inline-link:hover { text-decoration: underline; }
+
+  .thankyou-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Tax note ──────────────────────────────────────────────────── */
+  .tax-note {
+    border-top: 1px solid var(--line);
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tax-note__label {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .tax-note p:last-child {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-soft);
+    line-height: 1.65;
+  }
+
+  /* ── Responsive ────────────────────────────────────────────────── */
+  @media (max-width: 400px) {
+    .thankyou-hero__inner,
+    .thankyou-body .content-spine {
+      padding-inline: 1rem;
+    }
+
+    .thankyou-actions {
+      flex-direction: column;
+    }
+
+    .thankyou-actions a {
+      text-align: center;
+    }
+  }
+</style>

@@ -1,0 +1,826 @@
+---
+import Base from '../layouts/Base.astro';
+import RecordImage from '../components/RecordImage.astro';
+---
+
+<Base
+  title="Donate — Soke Kinney Memorial Fund"
+  description="Support the Soke Kinney Memorial Fund. Your gift funds scholarships and keeps the legacy of Soke Michael Kinney alive for the next generation."
+>
+
+  <!-- ── Hero image ─────────────────────────────────────────────── -->
+  <section class="donate-hero">
+    <div class="donate-hero__inner">
+      <RecordImage
+        src="/images/image-asset__14_.jpeg"
+        alt="Soke Michael Kinney presenting a certificate to a young child in a karate uniform"
+        nativeWidth={640}
+        nativeHeight={664}
+        source="Kinney Family"
+      />
+    </div>
+  </section>
+
+  <!-- ── Why give ───────────────────────────────────────────────── -->
+  <section class="why-give fade-rise" aria-labelledby="why-heading">
+    <div class="content-spine">
+      <p class="type-eyebrow why-give__eyebrow">Why give</p>
+      <h1 id="why-heading" class="type-h2 why-give__heading">
+        Keeping Soke Kinney's mission alive
+      </h1>
+      <div class="why-give__blocks">
+        <div class="why-give__block">
+          <h2 class="why-give__block-title">Scholarships for young martial artists</h2>
+          <p class="why-give__block-body">
+            Financial barriers keep talented students from the discipline that shaped Soke Kinney's
+            life. Your gift funds need-based scholarships so no child has to stop training because
+            of cost.
+          </p>
+        </div>
+        <div class="why-give__block">
+          <h2 class="why-give__block-title">A legacy worth preserving</h2>
+          <p class="why-give__block-body">
+            Soke Kinney spent 50 years building martial arts communities in the DC area and
+            St. Petersburg. He appeared on the <em>Today Show</em>, <em>Wide World of Sports</em>,
+            and received a national volunteer award from President Obama — because the work
+            itself was exceptional. Your support carries that work forward.
+          </p>
+        </div>
+        <div class="why-give__block">
+          <h2 class="why-give__block-title">Independent 501(c)(3) stewardship</h2>
+          <p class="why-give__block-body">
+            The Memorial Fund is a registered nonprofit, separate from the school he founded.
+            Gifts are tax-deductible and directed by a board of people who knew him.
+            EIN 81-2108510.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Donation form ──────────────────────────────────────────── -->
+  <section class="donate-section" aria-labelledby="donate-heading">
+    <div class="content-spine">
+      <h2 id="donate-heading" class="type-h2 donate-section__heading">Make a gift</h2>
+
+      <div id="form-error" class="form-banner form-banner--error" hidden aria-live="polite"></div>
+
+      <form id="donate-form" class="donate-form" novalidate aria-label="Donation form">
+
+        <!-- Frequency toggle -->
+        <fieldset class="field field--toggle">
+          <legend class="field__label">Frequency</legend>
+          <div class="toggle-group" role="group">
+            <label class="toggle-option">
+              <input type="radio" name="frequency" value="one_time" checked />
+              <span class="toggle-option__label">One-time</span>
+            </label>
+            <label class="toggle-option">
+              <input type="radio" name="frequency" value="monthly" />
+              <span class="toggle-option__label">Monthly</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Amount presets + custom -->
+        <fieldset class="field field--amount">
+          <legend class="field__label">Amount <span class="field__required" aria-label="required">*</span></legend>
+          <div class="amount-grid">
+            {[25, 50, 100, 250].map((amt) => (
+              <label class="amount-option">
+                <input type="radio" name="amount_preset" value={amt} checked={amt === 50} />
+                <span class="amount-option__label">${amt}</span>
+              </label>
+            ))}
+          </div>
+          <div class="field field--custom-amount">
+            <label for="custom-amount" class="field__label-sm">Other amount</label>
+            <div class="field__prefix-wrap">
+              <span class="field__prefix" aria-hidden="true">$</span>
+              <input
+                type="number"
+                id="custom-amount"
+                name="custom_amount"
+                class="field__input field__input--prefixed"
+                min="5"
+                step="1"
+                placeholder="Enter amount"
+                aria-label="Custom donation amount in dollars"
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Cover fees -->
+        <div class="field field--check">
+          <label class="check-label">
+            <input type="checkbox" name="cover_fees" id="cover-fees" checked />
+            <span class="check-label__text">
+              Cover the processing fee
+              <span id="fee-display" class="fee-display"></span>
+            </span>
+          </label>
+          <p class="field__hint">Ensures 100% of your intended gift reaches the fund.</p>
+        </div>
+
+        <!-- Total display -->
+        <div id="total-block" class="total-block" aria-live="polite">
+          <span class="total-block__label">Your total today:</span>
+          <span id="total-display" class="total-block__amount">$50.00</span>
+        </div>
+
+        <!-- Dedication -->
+        <div class="field">
+          <label for="dedication" class="field__label">
+            Dedication <span class="field__optional">(optional)</span>
+          </label>
+          <input
+            type="text"
+            id="dedication"
+            name="dedication"
+            class="field__input"
+            placeholder="e.g. memory of / honor of…"
+            maxlength="500"
+          />
+          <p class="field__hint">Will appear on your receipt.</p>
+        </div>
+
+        <!-- Public recognition -->
+        <div class="field field--check">
+          <label class="check-label">
+            <input type="checkbox" name="public_recognition" id="public-recognition" />
+            <span class="check-label__text">Display my name as a supporter</span>
+          </label>
+          <p class="field__hint">Unchecked = anonymous. Anonymous is the default.</p>
+        </div>
+
+        <!-- Donor info -->
+        <div class="field">
+          <label for="donor-name" class="field__label">
+            Name <span class="field__optional">(optional — used for your receipt)</span>
+          </label>
+          <input
+            type="text"
+            id="donor-name"
+            name="donor_name"
+            class="field__input"
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="field">
+          <label for="donor-email" class="field__label">
+            Email <span class="field__optional">(optional — for your receipt)</span>
+          </label>
+          <input
+            type="email"
+            id="donor-email"
+            name="donor_email"
+            class="field__input"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Employer matching -->
+        <div class="field">
+          <label for="employer" class="field__label">
+            Employer <span class="field__optional">(optional — for corporate matching)</span>
+          </label>
+          <input
+            type="text"
+            id="employer"
+            name="employer"
+            class="field__input"
+            autocomplete="organization"
+            placeholder="Company name"
+          />
+        </div>
+
+        <div class="form-footer">
+          <button type="submit" id="submit-btn" class="btn-donate">
+            Donate with Stripe
+          </button>
+          <p class="form-note">
+            You'll be taken to Stripe's secure checkout.
+            Apple Pay and Google Pay accepted.
+          </p>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- ── Trust block ────────────────────────────────────────────── -->
+  <section class="trust-block fade-rise" aria-label="Organization information">
+    <div class="content-spine trust-block__inner">
+      <div class="trust-block__item">
+        <p class="trust-block__label">Organization</p>
+        <p>Soke Kinney Memorial Fund</p>
+      </div>
+      <div class="trust-block__item">
+        <p class="trust-block__label">Status</p>
+        <p>501(c)(3) nonprofit</p>
+      </div>
+      <div class="trust-block__item">
+        <p class="trust-block__label">EIN</p>
+        <p>81-2108510</p>
+      </div>
+      <div class="trust-block__item">
+        <p class="trust-block__label">Florida registration</p>
+        <p>CH84123</p>
+      </div>
+      <div class="trust-block__item trust-block__item--address">
+        <p class="trust-block__label">Mailing address</p>
+        <address>
+          7627 Par Avenue North<br />
+          St. Petersburg, FL 33710
+        </address>
+      </div>
+    </div>
+  </section>
+
+</Base>
+
+<script>
+  const RATE = 0.029;
+  const FLAT = 0.30; // dollars
+
+  function getAmountDollars(): number {
+    const customInput = document.getElementById('custom-amount') as HTMLInputElement | null;
+    if (customInput?.value) {
+      const v = parseFloat(customInput.value);
+      if (!isNaN(v) && v >= 5) return v;
+    }
+    const selected = document.querySelector<HTMLInputElement>('input[name="amount_preset"]:checked');
+    return selected ? parseInt(selected.value, 10) : 50;
+  }
+
+  function coverFees(): boolean {
+    return (document.getElementById('cover-fees') as HTMLInputElement | null)?.checked ?? true;
+  }
+
+  function computeFee(intended: number): number {
+    const gross = (intended + FLAT) / (1 - RATE);
+    return Math.round((gross - intended) * 100) / 100;
+  }
+
+  function updateDisplay() {
+    const intended = getAmountDollars();
+    const fee = computeFee(intended);
+    const covering = coverFees();
+    const total = covering ? intended + fee : intended;
+
+    const feeEl = document.getElementById('fee-display');
+    const totalEl = document.getElementById('total-display');
+
+    if (feeEl) {
+      feeEl.textContent = covering ? ` (+$${fee.toFixed(2)})` : '';
+    }
+    if (totalEl) {
+      totalEl.textContent = `$${total.toFixed(2)}`;
+    }
+  }
+
+  // Wire up all inputs
+  document.querySelectorAll('input[name="amount_preset"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      const customInput = document.getElementById('custom-amount') as HTMLInputElement | null;
+      if (customInput) customInput.value = '';
+      updateDisplay();
+    });
+  });
+
+  document.getElementById('custom-amount')?.addEventListener('input', (e) => {
+    const val = (e.target as HTMLInputElement).value;
+    if (val) {
+      // Deselect preset radios
+      document.querySelectorAll<HTMLInputElement>('input[name="amount_preset"]').forEach((r) => {
+        r.checked = false;
+      });
+    }
+    updateDisplay();
+  });
+
+  document.getElementById('cover-fees')?.addEventListener('change', updateDisplay);
+
+  // Initial render
+  updateDisplay();
+
+  // Form submit
+  const form = document.getElementById('donate-form') as HTMLFormElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const errorBanner = document.getElementById('form-error') as HTMLElement | null;
+
+  function showError(msg: string) {
+    if (!errorBanner) return;
+    errorBanner.textContent = msg;
+    errorBanner.hidden = false;
+    errorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !submitBtn) return;
+
+    if (errorBanner) { errorBanner.hidden = true; errorBanner.textContent = ''; }
+
+    const intended = getAmountDollars();
+    if (intended < 5) {
+      showError('Minimum donation is $5.');
+      return;
+    }
+
+    const frequencyInput = form.querySelector<HTMLInputElement>('input[name="frequency"]:checked');
+    const frequency = frequencyInput?.value ?? 'one_time';
+
+    const coverFeesChecked = coverFees();
+    const amount_cents = Math.round(intended * 100);
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Redirecting to Stripe…';
+
+    const dedication = (form.elements.namedItem('dedication') as HTMLInputElement)?.value.trim() || undefined;
+    const public_recognition = (form.elements.namedItem('public_recognition') as HTMLInputElement)?.checked ?? false;
+    const employer = (form.elements.namedItem('employer') as HTMLInputElement)?.value.trim() || undefined;
+    const donor_name = (form.elements.namedItem('donor_name') as HTMLInputElement)?.value.trim() || undefined;
+    const donor_email = (form.elements.namedItem('donor_email') as HTMLInputElement)?.value.trim() || undefined;
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount_cents,  // intended amount; server recomputes fee independently
+          cover_fees: coverFeesChecked,
+          frequency,
+          dedication,
+          public_recognition,
+          employer,
+          donor_name,
+          donor_email,
+        }),
+      });
+
+      const data = await res.json() as { ok: boolean; url?: string; error?: string };
+
+      if (data.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        showError(data.error ?? 'Something went wrong. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Donate with Stripe';
+      }
+    } catch {
+      showError('Could not connect to checkout. Please check your connection and try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Donate with Stripe';
+    }
+  });
+</script>
+
+<style>
+  /* ── Hero ──────────────────────────────────────────────────────── */
+  .donate-hero {
+    background-color: var(--ink);
+    padding-block: 3rem;
+  }
+
+  .donate-hero__inner {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── Why give ──────────────────────────────────────────────────── */
+  .why-give {
+    padding-block: 4rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .why-give__eyebrow {
+    color: var(--crimson);
+    margin-bottom: 0.75rem;
+  }
+
+  .why-give__heading {
+    color: var(--ink);
+    margin-bottom: 2.5rem;
+  }
+
+  .why-give__blocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  .why-give__block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .why-give__block-title {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .why-give__block-body {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* ── Donate section ────────────────────────────────────────────── */
+  .donate-section {
+    padding-block: 4rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .donate-section__heading {
+    margin-bottom: 2rem;
+  }
+
+  /* ── Error banner ──────────────────────────────────────────────── */
+  .form-banner {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: var(--r);
+    margin-bottom: 1.5rem;
+  }
+
+  .form-banner--error {
+    background-color: #fdf2f2;
+    border: 1px solid #f5c2c2;
+    color: #7a1e19;
+  }
+
+  /* ── Form ──────────────────────────────────────────────────────── */
+  .donate-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    max-width: 40rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field__label {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .field__label-sm {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .field__required {
+    color: var(--crimson);
+    margin-left: 0.1em;
+  }
+
+  .field__optional {
+    font-weight: 400;
+    color: var(--text-soft);
+    font-size: 0.875em;
+  }
+
+  .field__hint {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.8125rem;
+    color: var(--text-soft);
+    line-height: 1.4;
+  }
+
+  .field__input {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    color: var(--ink);
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 0.625rem 0.875rem;
+    width: 100%;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+    appearance: none;
+  }
+
+  .field__input:focus {
+    outline: none;
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 3px rgba(160, 40, 33, 0.15);
+  }
+
+  .field__prefix-wrap {
+    position: relative;
+  }
+
+  .field__prefix {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-soft);
+    font-family: 'Barlow', system-ui, sans-serif;
+    pointer-events: none;
+  }
+
+  .field__input--prefixed {
+    padding-left: 1.75rem;
+  }
+
+  /* ── Frequency toggle ──────────────────────────────────────────── */
+  .field--toggle fieldset,
+  .field--toggle {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toggle-group {
+    display: flex;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .toggle-option {
+    display: contents;
+  }
+
+  .toggle-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .toggle-option__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.5rem;
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease;
+    user-select: none;
+    min-width: 7rem;
+  }
+
+  .toggle-option input[type="radio"]:checked + .toggle-option__label {
+    background-color: var(--ink);
+    color: var(--text-invert);
+  }
+
+  .toggle-option input[type="radio"]:focus-visible + .toggle-option__label {
+    outline: 2px solid var(--crimson);
+    outline-offset: 2px;
+  }
+
+  /* ── Amount grid ───────────────────────────────────────────────── */
+  .field--amount fieldset,
+  .field--amount {
+    border: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.75rem;
+  }
+
+  .amount-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+
+  .amount-option {
+    display: contents;
+  }
+
+  .amount-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .amount-option__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+    border: 2px solid var(--line);
+    border-radius: var(--r);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 150ms ease, background-color 150ms ease;
+    user-select: none;
+    text-align: center;
+  }
+
+  .amount-option input[type="radio"]:checked + .amount-option__label {
+    border-color: var(--crimson);
+    background-color: rgba(160, 40, 33, 0.06);
+    color: var(--crimson);
+  }
+
+  .amount-option input[type="radio"]:focus-visible + .amount-option__label {
+    outline: 2px solid var(--crimson);
+    outline-offset: 2px;
+  }
+
+  .field--custom-amount {
+    margin-top: 0.5rem;
+  }
+
+  /* ── Check fields ──────────────────────────────────────────────── */
+  .field--check {
+    gap: 0.3rem;
+  }
+
+  .check-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    cursor: pointer;
+  }
+
+  .check-label input[type="checkbox"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    accent-color: var(--crimson);
+  }
+
+  .check-label__text {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .fee-display {
+    font-weight: 400;
+    color: var(--text-soft);
+  }
+
+  /* ── Total block ───────────────────────────────────────────────── */
+  .total-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background-color: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+  }
+
+  .total-block__label {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    color: var(--text-soft);
+  }
+
+  .total-block__amount {
+    font-family: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  /* ── Submit ─────────────────────────────────────────────────────── */
+  .form-footer {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+
+  .btn-donate {
+    display: inline-block;
+    background-color: var(--crimson);
+    color: var(--text-invert);
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.9rem 2.25rem;
+    border-radius: var(--r);
+    border: none;
+    cursor: pointer;
+    transition: background-color 150ms ease;
+    flex-shrink: 0;
+  }
+
+  .btn-donate:hover,
+  .btn-donate:focus-visible {
+    background-color: var(--crimson-deep);
+  }
+
+  .btn-donate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-note {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-soft);
+    line-height: 1.5;
+  }
+
+  /* ── Trust block ───────────────────────────────────────────────── */
+  .trust-block {
+    padding-block: 3rem;
+    background-color: var(--paper-2);
+  }
+
+  .trust-block__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .trust-block__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .trust-block__item--address address {
+    font-style: normal;
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  .trust-block__label {
+    font-family: 'Space Mono', 'Courier New', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .trust-block__item p:last-child {
+    font-family: 'Barlow', system-ui, sans-serif;
+    font-size: 0.9375rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ── Responsive ────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .amount-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .toggle-option__label {
+      min-width: 0;
+      padding-inline: 1rem;
+    }
+
+    .form-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .btn-donate {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .donate-hero__inner,
+    .donate-section .content-spine,
+    .why-give .content-spine,
+    .trust-block .content-spine {
+      padding-inline: 1rem;
+    }
+  }
+</style>
